@@ -37,7 +37,8 @@ class RLInputGenerator:
             file_list = self.file_utility.load_file_names_in_directory(folder_list[folder_counter])
             folder_name = folder_list[folder_counter] + '/'
 
-            row_statistics = {'file_name': [],
+            row_statistics = {'folder_name': [],
+                              'file_name': [],
                               'row_counter': [],
                               'sentence_counter': []}
 
@@ -47,8 +48,21 @@ class RLInputGenerator:
                 file_data = self.yahoo_loader.load_file(
                     self.file_utility.source_data_path + "/" + folder_name, file_name)
 
-                row_statistics['file_name'].append(file_name)
+
+
+                #print("Original Folder Name: ", folder_list[folder_counter])
+                # file_name = file_name.replace('11yfinanceApi_', '')
+                # file_name =symbol.replace('_From_Csv', '')
+                file_name = symbol.replace('11yfinanceApi_', '')
+                file_name = file_name.replace('_From_Csv', '')
+
+                folder = file_name.split('.')[-1]
+                #print('Modified Folder Name: ', folder)
+
+                row_statistics['folder_name'].append(folder)
+                row_statistics['file_name'].append(file_name+'.csv')
                 row_statistics['row_counter'].append(len(file_data))
+
                 if len(file_data) > min_data_length_to_store_data:
                     raw_data = self.aggregator.aggregate_symbol_data(file_data)
 
@@ -57,17 +71,8 @@ class RLInputGenerator:
                         file_data.name = symbol
                         scaled_data = self.scaler.generate_scaled_data(raw_data)
 
-                        print("Original Folder Name: ", folder_list[folder_counter])
-                        #file_name = file_name.replace('11yfinanceApi_', '')
-                        #file_name =symbol.replace('_From_Csv', '')
-                        file_name = symbol.replace('11yfinanceApi_', '')
-                        file_name = file_name.replace('_From_Csv', '')
-
-                        folder = file_name.split('.')[-1]
-                        print('Modified Folder Name: ', folder)
-
                         self.file_utility.save_data(scaled_data, folder_list[folder_counter] + '/' + folder, file_name)
-                        row_statistics['row_counter'].append(len(scaled_data))
+                        #row_statistics['row_counter'].append(len(scaled_data))
                         row_statistics['sentence_counter'].append(len(scaled_data))
                     else:
                         row_statistics['sentence_counter'].append(0)
@@ -78,10 +83,10 @@ class RLInputGenerator:
                     self.file_utility.save_data(pd.DataFrame(row_statistics), '', folder_list[folder_counter] +
                                                 "_" + str(file_counter + 1))
 
-            row_statistics['sentence_length'] = self.default_data_loader.sentence_length
-            row_statistics['future_length'] = self.default_data_loader.length_to_look_into_future_for_rewards
-            row_statistics['min_number_of_rows_to_aggregate_data'] = \
-                min_data_length_to_store_data
+            #row_statistics['sentence_length'] = self.default_data_loader.sentence_length
+            #row_statistics['future_length'] = self.default_data_loader.length_to_look_into_future_for_rewards
+            #row_statistics['min_number_of_rows_to_aggregate_data'] = \
+            #    min_data_length_to_store_data
 
 
-            self.file_utility.save_data(pd.DataFrame(row_statistics), folder, folder_list[folder_counter])
+            #self.file_utility.save_data(pd.DataFrame(row_statistics), folder, folder_list[folder_counter])
