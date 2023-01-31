@@ -4,7 +4,7 @@ import pandas as pd
 import timeit
 
 if __name__ == '__main__':
-    sentence_len = 63
+    sentence_len = 31
     future_len = 8
 
     data_col = ['-' + str(i) for i in range(sentence_len - 1, 0, -1)]
@@ -20,8 +20,8 @@ if __name__ == '__main__':
                              'tolerance_percent_from_0_to_take_a_trade': 0.00,
                              'min_volatility_for_explosive_move_filtering': 0.1,
                              # 'source_data_path': 'Yahoo_Finance_Stock_Data',
-                             'source_data_path': '../Data_Source/Yahoo/Yahoo_Data/Stock',
-                             'save_destination_path': '../Data_Source/Yahoo/Processed_Yahoo_Data/Stock_Binary_tolerance_1_percent',
+                             'source_data_path': '../Data_Source/Yahoo/Original_Data',
+                             'save_destination_path': '../Data_Source/Yahoo/Processed_Yahoo_Data/Stock_Binary_tolerance_half_std',
                              'bin_size': 0.05,
                              'default_column_name': 'close',
                              'default_date_column_name': 'date',

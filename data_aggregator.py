@@ -129,7 +129,7 @@ class DataAggregator:
 
         merged.drop(self.price_column_name, axis=1, inplace=True)
         merged.set_index('date', inplace=True, drop=True)
-        print(merged.columns)
+        #print(merged.columns)
 
         return merged, round(merged.std(axis=1) / merged.mean(axis=1), self.rounding_precision)
 
@@ -325,6 +325,8 @@ class DataAggregator:
         action_reward_df.loc[action_0_map, 'action'] = 0
         action_reward_df.loc[action_minus_1_map, 'action'] = -1
 
+        # If action is to  short, then the reward will become positive
+        action_reward_df.loc[action_reward_df['action'] == -1, 'last_close'] = -1*action_reward_df.loc[action_reward_df['action']==-1, 'last_close']
 
         # print('action_reward_df[action_reward_df[action]==1): ', action_reward_df[action_reward_df['action'] == 1])
         # print('action_reward_df[action_reward_df[action]==0): ', action_reward_df[action_reward_df['action'] == 0])
@@ -410,8 +412,8 @@ class DataAggregator:
 
         if self.generate_binary_output:
             actions_rewards = self.set_binary_action_rewards(future_close_returns, std_ration)
-            print(actions_rewards)
-            print('len(actions_rewards): ', len(actions_rewards))
+            #print(actions_rewards)
+            #print('len(actions_rewards): ', len(actions_rewards))
 
         else:
             future_high_returns = self.calculate_future_returns(data_frame.loc[history.index[0]:, 'high'])
@@ -455,10 +457,10 @@ class DataAggregator:
 
         aggregated_data_clean.dropna(inplace=True)
         aggregated_data_clean['action'] = aggregated_data_clean['action'].astype(int)
-        print("8888888")
-        print(aggregated_data_clean)
-        print("77777777")
-        print(shit)
+        #print("8888888")
+        #print(aggregated_data_clean)
+        #print("77777777")
+        #print(shit)
 
         return aggregated_data_clean
 

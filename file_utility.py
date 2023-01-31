@@ -73,15 +73,22 @@ class FileUtility:
         return file_list
 
     def save_data(self, data, folder_name, file_name):
+
         self.line_printer.print_text('I am save_data from file_utility')
         # print(data.name)
+
         print('folder_name: ', folder_name)
         print('file_name:', file_name)
+
         if not os.path.isdir(self.save_destination_path + "/" + folder_name):
             os.makedirs(self.save_destination_path + "/" + folder_name)
+
+        print('Making Directory: ', self.save_destination_path + "/" + folder_name)
+        print('-----')
+        print(self.save_destination_path + "/" + folder_name + "/" + file_name + '.csv')
+        print('------')
         if self.file_format_to_save == 'csv':
             data.to_csv(self.save_destination_path + "/" + folder_name + "/" + file_name + '.csv')
         elif self.file_format_to_save == 'xlsx':
             data.to_excel(self.save_destination_path + "/" + folder_name + "/" + file_name + '.xlsx')
-
 
