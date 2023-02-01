@@ -55,11 +55,14 @@ class RLInputGenerator:
                 # file_name =symbol.replace('_From_Csv', '')
                 file_name = symbol.replace('11yfinanceApi_', '')
                 file_name = file_name.replace('_From_Csv', '')
+                file_name_split = file_name.split('.')
 
-                folder = file_name.split('.')[-1]
-                #print('Modified Folder Name: ', folder)
+                if len(file_name_split) > 1:
+                    sub_folder = file_name_split[-1]
+                else:
+                    sub_folder = 'No_Sub_Folder'
 
-                row_statistics['folder_name'].append(folder)
+                row_statistics['folder_name'].append(sub_folder)
                 row_statistics['file_name'].append(file_name+'.csv')
                 row_statistics['row_counter'].append(len(file_data))
 
@@ -71,7 +74,7 @@ class RLInputGenerator:
                         file_data.name = symbol
                         scaled_data = self.scaler.generate_scaled_data(raw_data)
 
-                        self.file_utility.save_data(scaled_data, folder_list[folder_counter] + '/' + folder, file_name)
+                        self.file_utility.save_data(scaled_data, folder_name + sub_folder, file_name)
                         #row_statistics['row_counter'].append(len(scaled_data))
                         row_statistics['sentence_counter'].append(len(scaled_data))
                     else:
