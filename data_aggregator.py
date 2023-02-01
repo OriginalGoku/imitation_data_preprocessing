@@ -327,6 +327,7 @@ class DataAggregator:
 
         # If action is to  short, then the reward will become positive
         action_reward_df.loc[action_reward_df['action'] == -1, 'last_close'] = -1*action_reward_df.loc[action_reward_df['action']==-1, 'last_close']
+        # Whats going on with github?
 
         # print('action_reward_df[action_reward_df[action]==1): ', action_reward_df[action_reward_df['action'] == 1])
         # print('action_reward_df[action_reward_df[action]==0): ', action_reward_df[action_reward_df['action'] == 0])
