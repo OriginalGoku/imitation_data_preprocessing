@@ -4,8 +4,8 @@ import pandas as pd
 import timeit
 
 if __name__ == '__main__':
-    sentence_len = 31
-    future_len = 8
+    sentence_len = 64
+    future_len = 20
 
     data_col = ['-' + str(i) for i in range(sentence_len - 1, 0, -1)]
     data_col.append('0')
@@ -24,15 +24,15 @@ if __name__ == '__main__':
                              'source_data_path': '../Data_Source/Yahoo/Original_Data/ETF',
                              # 'save_destination_path': '../Data_Source/Yahoo/Processed_Yahoo_Data/Stock_Binary_tolerance_half_std',
                              'save_destination_path': '../Data_Source/Yahoo/Processed_Yahoo_Data/ETF_Binary',
-                             'bin_size': 0.05,
+                             'bin_size': 0.1,
                              'default_column_name': 'close',
                              'default_date_column_name': 'date',
                              'debug_folder_path': 'Debug',
                              'file_formats_to_load': 'csv',
                              'file_format_to_save': 'csv',
-                             'frequency_for_saving_statistics': 500,
+                             'frequency_for_saving_statistics': 2000,
                              'rounding_precision': 2,
-                             'volatility_precision': 0.01,
+                             'volatility_precision': 0.05,
                              'debug_mode': False,
                              'verbose': True}
 
