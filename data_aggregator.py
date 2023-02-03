@@ -315,18 +315,32 @@ class DataAggregator:
         action_reward_df['std_ratio'] = pd.DataFrame(std_ratio*std_multiplier, index=future_close_prices.index)
 
 
+        # create masks for different actions
+        # action 1 is when last_close is greater than std_ratio
+        # action -1 is when last close is less than std_ratio
+        # action 0 is when last close is between + - std_ratio
         action_1_map = action_reward_df['last_close'] >= action_reward_df['std_ratio']
         action_minus_1_map = action_reward_df['last_close'] <= - action_reward_df['std_ratio']
-        action_0_map = ((- action_reward_df['std_ratio'] < action_reward_df['last_close']) &
+        action_reward_df.loc[action_1_map, 'action'] = 1
+
+
+        # if std_multiplier is 0 that means the output will be binary since std_ratio = 0
+        # if std_multiplier is > 0 then it will categorize the output into 3 different actions
+        if (std_multiplier>0):
+            action_0_map = ((- action_reward_df['std_ratio'] < action_reward_df['last_close']) &
                         (action_reward_df['last_close'] < action_reward_df['std_ratio'])
                         )
+            action_reward_df.loc[action_0_map, 'action'] = 0
+            action_reward_df.loc[action_minus_1_map, 'action'] = -1
+            action_reward_df.loc[action_reward_df['action'] == -1, 'last_close'] = -1*action_reward_df.loc[action_reward_df['action']==-1, 'last_close']
+        # if std_multiplier == 0 then there will only be 2 actions and the output is binary
+        else:
+            action_reward_df.loc[action_minus_1_map, 'action'] = 0
+            action_reward_df.loc[action_reward_df['action'] == 0, 'last_close'] = -1 * action_reward_df.loc[
+                action_reward_df['action'] == 0, 'last_close']
 
-        action_reward_df.loc[action_1_map, 'action'] = 1
-        action_reward_df.loc[action_0_map, 'action'] = 0
-        action_reward_df.loc[action_minus_1_map, 'action'] = -1
 
-        # If action is to  short, then the reward will become positive
-        action_reward_df.loc[action_reward_df['action'] == -1, 'last_close'] = -1*action_reward_df.loc[action_reward_df['action']==-1, 'last_close']
+        # If action is short, then the reward will become positive
         # Whats going on with github?
 
         # print('action_reward_df[action_reward_df[action]==1): ', action_reward_df[action_reward_df['action'] == 1])
